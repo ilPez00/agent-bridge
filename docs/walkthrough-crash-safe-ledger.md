@@ -42,7 +42,7 @@ with record_session("nightly-job") as rec:
     rec.error("HTTP 429 from provider")
 EOF
 python3 -m agent_bridge sync --adapter raw
-cat ~/BRIDGE.md    # one entry: prompt, the 429, span, hard-quit flag if it died
+cat ~/.hermes/BRIDGE.md    # default ledger path; one entry: prompt, the 429, span
 ```
 
 Or wrap any command — exceptions and nonzero exits are recorded automatically:
