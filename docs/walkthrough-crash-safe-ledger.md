@@ -59,8 +59,9 @@ The portfolio audit ran this tool on a **fresh HOME** and found a real crash:
 `append_entries()` opened `<bridge>.lock` without creating its parent directory, so the
 first-ever sync on a clean machine died with `FileNotFoundError` — in the one tool whose
 selling point is crash safety. A fix (`makedirs` before open) plus a pytest suite including
-a fresh-HOME regression test is proposed on branch `portfolio/audit-2026-11`. The finding
-is the point: claims get checked against running code, and failures are published.
+a fresh-HOME regression test merged in [PR #1](https://github.com/ilPez00/agent-bridge/pull/1)
+(2026-11-21). The finding is the point: claims get checked against running code, and
+failures are published.
 
 ## Limits
 
