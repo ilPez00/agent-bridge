@@ -116,7 +116,7 @@ Portfolio audit, fresh checkout:
 - `uv run --with pytest --python 3.12 python -m pytest -q`: **5 passed** (raw JSONL
   prompt/error recording, nonzero-exit recording, repeat-sync dedup, missing-store skip,
   fresh-HOME regression).
-- Found and fixed on this branch: the first-ever sync on a clean machine crashed with
+- Found and fixed in PR #1 (merged 2026-11-21): the first-ever sync on a clean machine crashed with
   `FileNotFoundError` — the lock file's parent dir was never created. `append_entries()`
   now creates it; the regression test fails against the pre-fix code with the exact error.
 - Fresh-HOME end-to-end demo (isolated HOME): record → sync → one ledger entry with the
