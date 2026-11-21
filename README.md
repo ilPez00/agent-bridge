@@ -10,6 +10,13 @@ Memory-sharing tools generally assume the agent cooperates at runtime. agent-bri
 is *post-mortem*: it reads each harness's native session store (transcripts,
 sqlite, JSONL) after the fact, so dead agents still report.
 
+> **TL;DR.** One shared Markdown ledger of what every AI harness on your machine did —
+> read post-mortem from native session stores, so hard-quit sessions still report.
+> Idempotent sync, flock append, eight adapters + zero-code generic JSONL.
+> **Verified 2026-11-21:** pytest suite 5/5 green; fresh-HOME record→sync→ledger demo
+> works end to end. Default ledger: `~/.hermes/BRIDGE.md`. MIT.
+> Walkthrough: [docs/walkthrough-crash-safe-ledger.md](docs/walkthrough-crash-safe-ledger.md).
+
 ## How it works
 
 ```
@@ -88,7 +95,8 @@ If it writes JSONL somewhere, no code needed — declare it in
 
 ## Config
 
-`~/.agent-bridge/config.json`, everything optional:
+`~/.agent-bridge/config.json`, everything optional. Default ledger path:
+`~/.hermes/BRIDGE.md` (the example below overrides it to `~/BRIDGE.md`):
 
 ```json
 {
@@ -100,6 +108,19 @@ If it writes JSONL somewhere, no code needed — declare it in
 ```
 
 `baseline` keeps the first run from flooding the bridge with your entire history.
+
+## Verified 2026-11-21
+
+Portfolio audit, fresh checkout:
+
+- `uv run --with pytest --python 3.12 python -m pytest -q`: **5 passed** (raw JSONL
+  prompt/error recording, nonzero-exit recording, repeat-sync dedup, missing-store skip,
+  fresh-HOME regression).
+- Found and fixed on this branch: the first-ever sync on a clean machine crashed with
+  `FileNotFoundError` — the lock file's parent dir was never created. `append_entries()`
+  now creates it; the regression test fails against the pre-fix code with the exact error.
+- Fresh-HOME end-to-end demo (isolated HOME): record → sync → one ledger entry with the
+  prompt and the 429 error. Output in the walkthrough.
 
 ## License
 
