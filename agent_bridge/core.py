@@ -8,6 +8,7 @@ last-activity timestamp (skips re-parsing unchanged sessions).
 
 import fcntl
 import json
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -101,6 +102,7 @@ class StateCache:
 def append_entries(bridge: Path, entries: list) -> None:
     if not entries:
         return
+    os.makedirs(bridge.parent, exist_ok=True)  # lock lives in the same dir
     lock = bridge.with_name(bridge.name + ".lock")
     with open(lock, "w") as lockf:
         fcntl.flock(lockf, fcntl.LOCK_EX)
